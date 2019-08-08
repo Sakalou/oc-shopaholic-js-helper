@@ -15,6 +15,13 @@ export default new class Modal {
   }
 
   handler() {
+    this.showModalEvent = new Event('showModal', {
+      bubbles: true
+    });
+    this.hideModalEvent = new Event('hideModal', {
+      bubbles: true
+    });
+
     document.addEventListener('click', ({ target }) => {
       const modalOpenButton = target.closest(this.modalOpenButtonSelector);
 
@@ -66,6 +73,7 @@ export default new class Modal {
 
       this.modalAnimationSpeed = this.constructor.getTransitionDuration(activeModalBody, 'opacity');
     }
+    this.activeModal.dispatchEvent(this.showModalEvent);
 
     setTimeout(() => {
       this.activeModal.classList.add(this.modalVisibleSelector);
@@ -79,6 +87,7 @@ export default new class Modal {
     const oldActiveModal = document.querySelector(`.${this.modalSelector}.${this.modalActiveSelector}`);
 
     this.deactivateFocusTrap();
+    oldActiveModal.dispatchEvent(this.hideModalEvent);
 
     if (hideOverlay) {
       Overlay.hide();

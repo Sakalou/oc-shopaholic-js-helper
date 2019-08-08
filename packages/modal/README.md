@@ -44,6 +44,16 @@ Helper accepts some css custom properties
 | --modal__body--transition-timing-function | ease |
 | --modal__body--transition-duration | 0.5s |
 
+## Events
+
+### showModal
+
+Event `showModal` dispatch every time when modal open
+
+### hideModal
+
+Event `showModal` dispatch every time when modal hide
+
 ## Methods
 
 ### show(id)
