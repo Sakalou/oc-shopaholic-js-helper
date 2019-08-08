@@ -8,19 +8,13 @@ export default new class Overlay {
   }
 
   show() {
-    this.overlay = document.createElement('div');
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    if (!!this.overlay) return;
 
+    this.overlay = document.createElement('div');
     this.overlay.classList.add(this.overlaySelector);
     document.body.append(this.overlay);
-
-    if (window.innerWidth > document.documentElement.clientWidth) {
-      document.documentElement.classList.add(this.htmlScrollbarSelector);
-    }
-
-    document.body.style.marginTop = `-${scrollY}px`;
-    document.documentElement.classList.add(this.htmlNoScrollSelector);
-
+    this.fixViewport();
+    
     setTimeout(() => {
       this.overlay.classList.add(this.overlayVisibleSelector);
       if (this.overlayAnimationSpeed === null) {
@@ -32,18 +26,34 @@ export default new class Overlay {
   hide() {
     if (!this.overlay) return;
 
-    const newScrollTop = -document.body.style.marginTop.slice(0, -2);
-
     this.overlay.classList.remove(this.overlayVisibleSelector);
 
     setTimeout(() => {
       document.body.removeChild(this.overlay);
-      document.documentElement.classList.remove(this.htmlScrollbarSelector);
-      document.documentElement.classList.remove(this.htmlNoScrollSelector);
-      document.body.style.marginTop = '';
-      window.scrollTo(null, newScrollTop);
+      this.unfixViewport();
       this.overlay = null;
     }, this.overlayAnimationSpeed);
+  }
+
+  fixViewport() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+
+    document.body.style.marginTop = `-${scrollY}px`;
+
+    if (window.innerWidth > document.documentElement.clientWidth) {
+      document.documentElement.classList.add(this.htmlScrollbarSelector);
+    }
+
+    document.documentElement.classList.add(this.htmlNoScrollSelector);
+  }
+
+  unfixViewport() {
+    const newScrollTop = -document.body.style.marginTop.slice(0, -2);
+
+    document.documentElement.classList.remove(this.htmlScrollbarSelector);
+    document.documentElement.classList.remove(this.htmlNoScrollSelector);
+    document.body.style.marginTop = null;
+    window.scrollTo(null, newScrollTop);
   }
 
   static getTransitionDuration(element, propertyName) {
