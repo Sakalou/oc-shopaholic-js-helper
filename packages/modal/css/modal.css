@@ -5,19 +5,19 @@
   right: 0;
   bottom: 0;
   left: 0;
-  display: none;
+  display: flex;
+  visibility: hidden;
   overflow: auto;
   justify-content: center;
   align-items: center;
+  transition: visibility 0s var(--modal__body--transition-duration, 0.5s);
   backface-visibility: hidden;
   -webkit-overflow-scrolling: touch;
 
   &_active {
-    display: flex;
-  }
-
-  &_visible {
     --modal__body--opacity: 1;
+    visibility: visible;
+    transition: none;
   }
 }
 

@@ -8,8 +8,6 @@ export default new class Modal {
     this.modalCloseButtonSelector = '[data-modal-close]';
     this.modalOpenButtonSelector = '[data-modal]';
     this.modalActiveSelector = 'modal_active';
-    this.modalVisibleSelector = 'modal_visible';
-    this.modalAnimationSpeed = null;
 
     this.handler();
   }
@@ -67,38 +65,24 @@ export default new class Modal {
 
     this.activeModal = document.querySelector(`#${id}`);
     this.replaceModalToBodyEnd();
-    this.activeModal.classList.add(this.modalActiveSelector);
-    if (this.modalAnimationSpeed === null) {
-      const activeModalBody = this.activeModal.querySelector(`.${this.modalBodySelector}`);
-
-      this.modalAnimationSpeed = this.constructor.getTransitionDuration(activeModalBody, 'opacity');
-    }
-    this.activeModal.dispatchEvent(this.showModalEvent);
-
     setTimeout(() => {
-      this.activeModal.classList.add(this.modalVisibleSelector);
+      this.activeModal.classList.add(this.modalActiveSelector);
+      this.activeModal.dispatchEvent(this.showModalEvent);
       this.activateFocusTrap();
-    });
+    }, 10);
   }
 
   hide({ hideOverlay = true } = {}) {
     if (!this.activeModal) return;
 
-    const oldActiveModal = document.querySelector(`.${this.modalSelector}.${this.modalActiveSelector}`);
-
     this.deactivateFocusTrap();
-    oldActiveModal.dispatchEvent(this.hideModalEvent);
+    this.activeModal.dispatchEvent(this.hideModalEvent);
+    this.activeModal.classList.remove(this.modalActiveSelector);
 
     if (hideOverlay) {
       Overlay.hide();
       this.activeModal = null;
     }
-
-    oldActiveModal.classList.remove(this.modalVisibleSelector);
-
-    setTimeout(() => {
-      oldActiveModal.classList.remove(this.modalActiveSelector);
-    }, this.modalAnimationSpeed);
   }
 
   replaceModalToBodyEnd() {
@@ -119,21 +103,5 @@ export default new class Modal {
     if (!this.focusTrap) return;
 
     this.focusTrap.deactivate();
-  }
-
-  static getTransitionDuration(element, propertyName) {
-    const computedStyle = getComputedStyle(element);
-    const transitions = computedStyle.transition.split(', ');
-    const transitionProperties = computedStyle.transitionProperty.split(', ');
-    let duration = 0;
-
-    transitionProperties.some((property, index) => {
-      if (property === propertyName) {
-        duration = +transitions[index].split(' ')[1].slice(0, -1) * 1000;
-        return true;
-      }
-    });
-
-    return duration;
   }
 }();

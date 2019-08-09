@@ -18,11 +18,14 @@ html.has-scrollbar {
   right: 0;
   bottom: 0;
   left: 0;
+  visibility: hidden;
+  transition: opacity var(--overlay-transition-duration, 0.5s) var(--overlay-transition-timing-function, ease), visibility 0s var(--overlay-transition-duration, 0.5s);
   opacity: 0;
-  transition: opacity var(--overlay-transition-duration, 0.5s) var(--overlay-transition-timing-function, ease);
   background-color: var(--overlay-background-color, #000000);
 
   &_visible {
-    opacity: var(--overlay-opacity, 0.5);
+    visibility: visible;
+    transition: opacity var(--overlay-transition-duration, 0.5s) var(--overlay-transition-timing-function, ease);
+    opacity: var(--overlay-opacity, 0.5)
   }
 }

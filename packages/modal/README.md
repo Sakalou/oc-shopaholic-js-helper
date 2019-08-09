@@ -58,7 +58,7 @@ Event `showModal` dispatch every time when modal hide
 
 ### show(id)
 
-`Open modal window`
+`Show modal`
 
 | Param | Type |
 | --- | --- |
@@ -66,7 +66,7 @@ Event `showModal` dispatch every time when modal hide
 
 ### hide({ hideOverlay })
 
-`Close opened modal window`
+`Hide opened modal`
 
 | Param | Type | Description |
 | --- | --- | --- |
