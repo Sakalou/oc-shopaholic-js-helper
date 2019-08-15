@@ -1,17 +1,19 @@
-# Modal helper package
+# @lovata/modal
 
 ## Installation
 
-```bash
+```sh
 npm install @lovata/modal
 ```
 
 ## Initialization
 
+### Javascript
 ```javascript
 import Modal from '@lovata/modal';
 ```
 
+### CSS
 ```css
 @import '@lovata/modal/css/modal';
 ```
@@ -22,13 +24,12 @@ import Modal from '@lovata/modal';
 <div class="modal" id="{id}">
     <div class="modal__body">
         <button type="button" data-modal-close></button>
-        
+        ...
     </div>
 </div>
 ```
 
-Element with attribute `data-modal-close` click will close modal.
-
+Element with attribute `data-modal-close` click will close current modal.
 Element with attribute `data-modal-open="{id}"` click will open modal with specified id:
 
 ```html
@@ -48,17 +49,17 @@ Helper accepts some css custom properties
 
 ### showModal
 
-Event `showModal` dispatch every time when modal open
+Event `showModal` dispatch when modal open
 
 ### hideModal
 
-Event `showModal` dispatch every time when modal hide
+Event `showModal` dispatch when modal hide
 
 ## Methods
 
 ### show(id)
 
-`Show modal`
+Show modal
 
 | Param | Type |
 | --- | --- |
@@ -66,16 +67,16 @@ Event `showModal` dispatch every time when modal hide
 
 ### hide({ hideOverlay })
 
-`Hide opened modal`
+Hide opened modal
 
 | Param | Type | Description |
 | --- | --- | --- |
-| hideOverlay | <code>boolean</code> | Wheter to hide overlay. Default - true |
+| hideOverlay | <code>boolean</code> | Wheter to hide overlay. Default - `true` |
 
 ### activateFocusTrap()
 
-`Activate focus trap for active modal`
+Activate focus trap for active modal
 
 ### deactivateFocusTrap()
 
-`Deactivate focus trap for active modal`
+Deactivate focus trap for active modal

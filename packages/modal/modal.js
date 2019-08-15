@@ -14,10 +14,10 @@ export default new class Modal {
 
   handler() {
     this.showModalEvent = new Event('showModal', {
-      bubbles: true
+      bubbles: true,
     });
     this.hideModalEvent = new Event('hideModal', {
-      bubbles: true
+      bubbles: true,
     });
 
     document.addEventListener('click', ({ target }) => {
@@ -39,22 +39,28 @@ export default new class Modal {
     });
 
     document.addEventListener('click', ({ target }) => {
-      if (target.closest(`.${this.modalSelector}`) &&
-        !target.closest(`.${this.modalBodySelector}`)) {
+      if (target.closest(`.${this.modalSelector}`)
+        && !target.closest(`.${this.modalBodySelector}`)) {
         this.hide();
       }
     });
 
     window.addEventListener('keydown', ({ keyCode }) => {
-      if (keyCode === 27 &&
-        this.activeModal &&
-        document.activeElement.closest(`.${this.modalSelector}`)) {
+      if (keyCode === 27
+        && this.activeModal
+        && document.activeElement.closest(`.${this.modalSelector}`)) {
         this.hide();
       }
+    });
+
+    window.addEventListener('popstate', () => {
+      this.showHashed();
     });
   }
 
   show(id) {
+    if (!document.querySelector(`#${id}`)) return;
+
     if (this.activeModal) {
       this.hide({
         hideOverlay: false,
@@ -65,11 +71,16 @@ export default new class Modal {
 
     this.activeModal = document.querySelector(`#${id}`);
     this.replaceModalToBodyEnd();
-    setTimeout(() => {
-      this.activeModal.classList.add(this.modalActiveSelector);
-      this.activeModal.dispatchEvent(this.showModalEvent);
-      this.activateFocusTrap();
-    }, 10);
+    this.activeModal.classList.add(this.modalActiveSelector);
+    window.history.replaceState('', document.title, `#${id}`);
+    this.activeModal.dispatchEvent(this.showModalEvent);
+    this.activateFocusTrap();
+  }
+
+  showHashed() {
+    const { hash } = window.location;
+
+    if (hash.length > 1) this.show(hash.substr(1));
   }
 
   hide({ hideOverlay = true } = {}) {
@@ -78,6 +89,7 @@ export default new class Modal {
     this.deactivateFocusTrap();
     this.activeModal.dispatchEvent(this.hideModalEvent);
     this.activeModal.classList.remove(this.modalActiveSelector);
+    window.history.replaceState('', document.title, window.location.pathname + window.location.search);
 
     if (hideOverlay) {
       Overlay.hide();
